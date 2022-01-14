@@ -9,17 +9,36 @@ client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
   if (message.content.startsWith('addrole')) {
-    const roleName = message.content.split(' ')[1];
-    const role = getRole(roleName, message.guild.roles.cache);
-    if (role) {
-      await message.member.roles.add(role);
-      await message.delete();
+    const parts = message.content.split(' ');
+
+    if (parts[1] === 'custom') {
+      const name = parts[2];
+      const role = await message.guild.roles.create({
+        data: {
+          name,
+          color: 'RED',
+        },
+      });
+
+      await maybeAddRole(role, message);
+    } else {
+      const name = parts[1];
+      const role = getRole(name, message.guild.roles.cache);
+
+      await maybeAddRole(role, message);
     }
   }
 });
 
 function getRole(name, cache) {
   return cache.find(role => roles[name] === role.id);
+}
+
+async function maybeAddRole(role, message) {
+  if (role) {
+    await message.member.roles.add(role);
+    await message.delete();
+  }
 }
 
 client.login(token);
