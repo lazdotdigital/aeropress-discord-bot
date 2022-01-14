@@ -9,25 +9,29 @@ client.on('messageCreate', async message => {
   if (message.author.bot) return;
 
   if (message.content.startsWith('addrole')) {
-    const parts = message.content.split(' ');
-
-    if (parts[1] === 'custom') {
-      const name = parts.slice(2).join(' ');
-      const role = await message.guild.roles.create({
-        name,
-        color: 'RED',
-        reason: 'Custom Role',
-      });
-
-      await maybeAddRole(role, message);
-    } else {
-      const name = parts[1];
-      const role = getRole(name, message.guild.roles.cache);
-
-      await maybeAddRole(role, message);
-    }
+    await addRoleCommand(message);
   }
 });
+
+async function addRoleCommand(message) {
+  const parts = message.content.split(' ');
+
+  if (parts[1] === 'custom') {
+    const name = parts.slice(2).join(' ');
+    const role = await message.guild.roles.create({
+      name,
+      color: 'RED',
+      reason: 'Custom Role',
+    });
+
+    await maybeAddRole(role, message);
+  } else {
+    const name = parts[1];
+    const role = getRole(name, message.guild.roles.cache);
+
+    await maybeAddRole(role, message);
+  }
+}
 
 function getRole(name, cache) {
   return cache.find(role => roles[name] === role.id);
