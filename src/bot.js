@@ -14,10 +14,9 @@ client.on('messageCreate', async message => {
     if (parts[1] === 'custom') {
       const name = parts[2];
       const role = await message.guild.roles.create({
-        data: {
-          name,
-          color: 'RED',
-        },
+        name,
+        color: 'RED',
+        reason: 'Custom Role',
       });
 
       await maybeAddRole(role, message);
