@@ -12,7 +12,7 @@ client.on('messageCreate', async message => {
     const parts = message.content.split(' ');
 
     if (parts[1] === 'custom') {
-      const name = parts[2];
+      const name = parts.slice(2).join(' ');
       const role = await message.guild.roles.create({
         name,
         color: 'RED',
